@@ -63,6 +63,23 @@ class MusicConverter:
         """
         pass
 
+    def get_repeat_folder_structure(self) -> None:
+        """Get the folder structure in the itunes folder and replicate it in the target destination.
+        """
+        self.get_folder_structure()
+        self.repeat_folder_structure()
+
+    def repeat_folder_structure(self) -> None:
+        """Repeat the folder structure found in the itunes folder in the target destination.
+
+        Notes
+        -----
+        Forced to use ch(92) as f strings for some reason don't allow backslashes lol - this bit of the code is just
+        used to ensure the repeated folder structure does not include folders that are the names of the m4a files.
+        """
+        [os.makedirs(f"{self.target_path}/{folder_path.rsplit(chr(92), 1)}", exist_ok=True)
+         for folder_path in self.files_list]
+
     def get_folder_structure(self) -> None:
         """Create a list of all files in some structure
 
@@ -72,7 +89,7 @@ class MusicConverter:
         """
         for root, dirs, file_names in os.walk(self.relative_path):
             for file in file_names:
-                self.files_list.append(os.path.join(root, file))
+                self.files_list.append(os.path.join(root, file).replace(RELATIVE_PATH, ""))
 
     def m4a_to_mp3(
         self,
