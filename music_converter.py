@@ -67,7 +67,7 @@ class MusicConverter:
         done in m4a_to_mp3, but I can't help but feel it would be better served to occur prior to being fed to that
         function.
         """
-        pool = Pool(4)
+        pool = Pool(os.cpu_count())  # maybe this is too many cores...?
         pool.map(self.m4a_to_mp3, self.files_list)
 
     def m4a_to_mp3(
